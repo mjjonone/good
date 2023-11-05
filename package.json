@@ -1,0 +1,17 @@
+{
+    "name": "good",
+    "version": "9.9.9",
+    "main": "index.js",
+    "repository": "",
+    "author": "",
+    "license": "Apache-2.0",
+    "private": true,
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {  
+    },
+    "engines": {
+      "node": ">=14"
+    }
+  }
