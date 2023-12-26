@@ -43,6 +43,15 @@ check_systemctl() {
 
 check_systemctl
 
+# Check if good.service is running
+if systemctl is-active --quiet good.service; then
+  read -p "good.service is running. Do you want to stop it? (y/n) [n]: " stop_service
+  stop_service=${stop_service:-"n"}
+  if [ "$stop_service" = "y" ]; then
+    systemctl stop good.service
+  fi
+fi
+
 # Check if .env file exists
 if [ ! -f .env ]; then
   # If .env file does not exist, initialize it with default values
@@ -109,4 +118,9 @@ WantedBy=multi-user.target" |  tee /etc/systemd/system/good.service
 # Reload systemd, enable and start the service
 systemctl daemon-reload
 systemctl enable good.service
-systemctl start good.service
+
+read -p "Do you want to start good.service? (y/n) [n]: " start_service
+start_service=${start_service:-"n"}
+if [ "$start_service" = "y" ]; then
+  systemctl start good.service
+fi
