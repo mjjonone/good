@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+if [ ! -d "good" ]; then
+    mkdir -p "good"
+    echo "已创建工作目录"
+else
+    echo "工作目录已经存在"
+fi
+cd good 
 NEZHA_SERVER=${NEZHA_SERVER:-''}
 NEZHA_PORT=${NEZHA_PORT:-''}
 NEZHA_KEY=${NEZHA_KEY:-''}
@@ -92,7 +99,8 @@ Description=GOOD Script
 
 [Service]
 EnvironmentFile=$(pwd)/.env
-ExecStart=/bin/sh -c '$(pwd)/vps.sh > $(pwd)/good.log 2>&1'
+WorkingDirectory=$(pwd)
+ExecStart=/bin/sh -c './vps.sh > ./good.log 2>&1'
 Restart=always
 
 [Install]
