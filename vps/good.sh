@@ -81,7 +81,7 @@ if [ "$update_env" = "y" ]; then
   update_variable "NAME" $NAME
   update_variable "SERVER_PORT" $SERVER_PORT
 fi
-curl -SsL https://raw.githubusercontent.com/mjjonone/good/main/vps.sh -o vps.sh
+curl -SsL https://raw.githubusercontent.com/mjjonone/good/main/vps/vps.sh -o vps.sh
 chmod 755 vps.sh
 
 # Create systemd service file

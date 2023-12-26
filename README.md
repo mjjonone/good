@@ -1,8 +1,9 @@
 # good
 # Only supports project URL/sub subscription format.
+# 容器使用请参考mjj项目 https://github.com/mjjonone/mjj
 # vps:
 ```
-curl https://raw.githubusercontent.com/mjjonone/good/main/good.sh -o good.sh && bash good.sh 
+curl https://raw.githubusercontent.com/mjjonone/good/main/vps/good.sh -o good.sh && bash good.sh 
 ```
 
 ## 免责声明:
