@@ -83,7 +83,7 @@ if [ "$update_env" = "y" ]; then
   update_variable "NAME" $NAME
   update_variable "SERVER_PORT" $SERVER_PORT
 fi
-
+curl -SsL https://raw.githubusercontent.com/mjjonone/good/main/vps.sh -o vps.sh
 chmod 755 vps.sh
 
 # Create systemd service file
@@ -93,6 +93,7 @@ Description=GOOD Script
 [Service]
 EnvironmentFile=$(pwd)/.env
 ExecStart=/bin/sh -c '$(pwd)/vps.sh > $(pwd)/good.log 2>&1'
+Restart=always
 
 [Install]
 WantedBy=multi-user.target" |  tee /etc/systemd/system/good.service
