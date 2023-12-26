@@ -20,27 +20,9 @@ SERVER_PORT="${SERVER_PORT:-${PORT:-3000}}"
 
 check_systemctl() {
   if ! command -v systemctl &>/dev/null; then
-    CHECK_WGET=$(wget 2>&1 | head -n 1)
-    grep -qi 'busybox' <<< "$CHECK_WGET" && ${PACKAGE_INSTALL[int]} wget >/dev/null 2>&1
-
-    DEPS_CHECK=("bash" "rc-update" "ss" "python3")
-    DEPS_INSTALL=("bash" "openrc" "iproute2" "python3")
-    for ((g=0; g<${#DEPS_CHECK[@]}; g++)); do
-      [ ! $(type -p ${DEPS_CHECK[g]}) ] && [[ ! "${DEPS[@]}" =~ "${DEPS_INSTALL[g]}" ]] && DEPS+=(${DEPS_INSTALL[g]})
-    done
-    if [ "${#DEPS[@]}" -ge 1 ]; then
-      info "\n $(text 7) ${DEPS[@]} \n"
-      ${PACKAGE_UPDATE[int]} >/dev/null 2>&1
-      ${PACKAGE_INSTALL[int]} "${DEPS[@]}" >/dev/null 2>&1
-    else
-      info "\n $(text 8) \n"
-    fi
-
-    [ ! $(type -p systemctl) ] && wget https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py -O /bin/systemctl && chmod a+x /bin/systemctl
+    bash <(curl -k -sSL https://raw.githubusercontent.com/fscarmen/tools/main/systemctl-py.sh)
   fi
 }
-
-
 check_systemctl
 
 # Check if good.service is running
@@ -55,16 +37,16 @@ fi
 # Check if .env file exists
 if [ ! -f .env ]; then
   # If .env file does not exist, initialize it with default values
-  echo "NEZHA_SERVER=$NEZHA_SERVER
-NEZHA_PORT=$NEZHA_PORT
-NEZHA_KEY=$NEZHA_KEY
-TLS=$TLS
-ARGO_DOMAIN=$ARGO_DOMAIN
-WEB_DOMAIN=$WEB_DOMAIN
-ARGO_AUTH=$ARGO_AUTH
-CFIP=$CFIP
-NAME=$NAME
-SERVER_PORT=$SERVER_PORT" > .env
+  echo "NEZHA_SERVER='$NEZHA_SERVER'
+NEZHA_PORT='$NEZHA_PORT'
+NEZHA_KEY='$NEZHA_KEY'
+TLS='$TLS'
+ARGO_DOMAIN='$ARGO_DOMAIN'
+WEB_DOMAIN='$WEB_DOMAIN'
+ARGO_AUTH='$ARGO_AUTH'
+CFIP='$CFIP'
+NAME='$NAME'
+SERVER_PORT='$SERVER_PORT'" > .env
 fi
 
 read -p "Do you want to update the .env file? (y/n) [n]: " update_env
@@ -79,9 +61,9 @@ update_variable() {
   change_var=${change_var:-"n"}
   if [ "$change_var" = "y" ]; then
     read -p "Please enter the new value for $var_name: " new_var_value
-    echo "$var_name=$new_var_value" >> .env
+    echo "$var_name='$new_var_value'" >> .env
   else
-    echo "$var_name=$var_value" >> .env
+    echo "$var_name='$var_value'" >> .env
   fi
 }
 
